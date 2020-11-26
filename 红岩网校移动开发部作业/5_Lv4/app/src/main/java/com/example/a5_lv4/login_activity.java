@@ -2,24 +2,19 @@ package com.example.a5_lv4;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Toast;;
 
-import java.io.Serializable;
-
-public class login_activity extends AppCompatActivity  {
+public class login_activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,12 +23,12 @@ public class login_activity extends AppCompatActivity  {
         TextView tencent = findViewById(R.id.tv_tencent);
         TextView userAgreement = findViewById(R.id.tv_user_agreement);
         TextView register = findViewById(R.id.tv_register);
-        EditText account=findViewById(R.id.et_account);
-        EditText password=findViewById(R.id.et_password);
+        EditText account = findViewById(R.id.et_account);
+        EditText password = findViewById(R.id.et_password);
         Button login = findViewById(R.id.btn_login);
         login.setEnabled(false);
         CheckBox agreeUserAgreement = findViewById(R.id.cb_user_agreement);
-        CheckBox rememberPassword=findViewById(R.id.cb_remember_password);
+        CheckBox rememberPassword = findViewById(R.id.cb_remember_password);
         //点击新浪微博登录
         sina.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +87,18 @@ public class login_activity extends AppCompatActivity  {
                 }
             }
         });
-        //点击注册
+
+        //记住密码和同意用户协议
+        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+        SharedPreferences preferences = getSharedPreferences("data", MODE_PRIVATE);
+        boolean isRemember = preferences.getBoolean("remember_password_agree_user_agreement", false);
+        if (isRemember) {
+            account.setText(preferences.getString("account", " "));
+            password.setText(preferences.getString("password", " "));
+            rememberPassword.setChecked(true);
+            agreeUserAgreement.setChecked(true);
+        }
+        //点击立即注册
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,31 +106,21 @@ public class login_activity extends AppCompatActivity  {
                 startActivity(intent);
             }
         });
-        //记住密码和同意用户协议
-        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-        SharedPreferences preferences= getSharedPreferences("data",MODE_PRIVATE);
-        boolean isRemember=preferences.getBoolean("remember_password_agree_user_agreement",false);
-        if (isRemember){
-            account.setText(preferences.getString("account"," "));
-            password.setText(preferences.getString("password"," "));
-            rememberPassword.setChecked(true);
-            agreeUserAgreement.setChecked(true);
-        }
         //点击登录
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              if (account.getEditableText().toString().equals(preferences.getString("account"," "))&&password.getEditableText().toString().equals(preferences.getString("password"," "))){
-                  if (rememberPassword.isChecked()){
-                      editor.putBoolean("remember_password_agree_user_agreement",true);
-                      editor.apply();
-                  }
-                  Intent intent=new Intent(login_activity.this,first_activity.class);
-                  startActivity(intent);
-                  finish();
-              }else {
-                  Toast.makeText(login_activity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
-              }
+                if (account.getEditableText().toString().equals(preferences.getString("account", " ")) && password.getEditableText().toString().equals(preferences.getString("password", " "))) {
+                    if (rememberPassword.isChecked()) {
+                        editor.putBoolean("remember_password_agree_user_agreement", true);
+                        editor.apply();
+                    }
+                    Intent intent = new Intent(login_activity.this, first_activity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(login_activity.this, "账号或密码错误", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

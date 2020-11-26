@@ -1,8 +1,6 @@
 package com.example.a5_lv4;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -101,8 +99,7 @@ public class register_activity extends AppCompatActivity {
                 editor.putString("password", password.getEditableText().toString());
                 editor.apply();
                 Toast.makeText(register_activity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                Intent intent=new Intent(register_activity.this,login_activity.class);
-                startActivity(intent);
+                finish();
             }
         });
     }
